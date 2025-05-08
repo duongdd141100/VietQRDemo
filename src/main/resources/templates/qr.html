@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Creator</title>
+</head>
+<body>
+    <div id="account-name">
+        <label for="account-name-input">Account Name</label>
+        <input id="account-name-input" type="text" required>
+    </div>
+    <div id="account-no">
+        <label for="account-no-input">Account No</label>
+        <input id="account-no-input" type="text" required>
+    </div>
+    <div id="amount">
+        <label for="amount-input">Amount</label>
+        <input id="amount-input" type="text" required>
+    </div>
+    <div id="info">
+        <label for="info-input">Info</label>
+        <input id="info-input" type="text" required>
+    </div>
+    <div id="bank">
+        <label for="bank-input">Bank</label>
+        <select id="bank-input">
+            <option th:each="bank : ${banks}" th:value="${bank.bin}" th:text="${bank.name}"></option>
+        </select>
+    </div>
+    <button onClick="generateQr()">Generate</button>
+</body>
+</html>
+<script>
+    async function generateQr() {
+        const body = {
+            accountName: document.getElementById("account-name-input").value,
+            accountNo: document.getElementById("account-no-input").value,
+            acqId: document.getElementById("bank-input").value,
+            amount: document.getElementById("amount-input").value,
+            addInfo: document.getElementById("info-input").value,
+            logo: "",
+            template: "compact",
+            theme: "compact"
+        }
+
+        console.info(body);
+        const response = await fetch('http://localhost:8080/qr/generate', {
+            method: 'POST',
+            body: JSON.stringify(body), // string or object
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const myJson = await response.json();
+        console.info(myJson);
+
+    }
+</script>
