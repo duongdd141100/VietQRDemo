@@ -3,41 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>QR Creator</title>
-    <style>
-        option {
-            position: relative;
-        }
-        img {
-            position: absolute;
-            z-index: 1000;
-        }
-    </style>
+
+    <!-- Select2 CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+            rel="stylesheet"
+    />
+
+    <!-- jQuery (required by Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!--    <style>-->
+<!--        option {-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        img {-->
+<!--            position: absolute;-->
+<!--            z-index: 1000;-->
+<!--        }-->
+
+<!--        .select2-results__option img,-->
+<!--        .select2-selection__rendered img {-->
+<!--            width: 20px;-->
+<!--            height: auto;-->
+<!--            margin-right: 8px;-->
+<!--            vertical-align: middle;-->
+<!--        }-->
+<!--    </style>-->
 </head>
+
 <body>
-    <div id="account-name">
-        <label for="account-name-input">Account Name</label>
-        <input id="account-name-input" type="text" required>
-    </div>
-    <div id="account-no">
-        <label for="account-no-input">Account No</label>
-        <input id="account-no-input" type="text" required>
-    </div>
-    <div id="amount">
-        <label for="amount-input">Amount</label>
-        <input id="amount-input" type="text" required>
-    </div>
-    <div id="info">
-        <label for="info-input">Info</label>
-        <input id="info-input" type="text" required>
-    </div>
-    <div id="bank">
-        <label for="bank-input">Bank</label>
-        <select id="bank-input">
-            <option th:each="bank : ${banks}" th:value="${bank.bin}"><img th:src="${bank.logo}">[[${bank.name}]]</option>
-        </select>
-    </div>
-    <button onClick="generateQr()">Generate</button>
-    <img src="" id="qr-code" />
+<div id="account-name">
+    <label for="account-name-input">Account Name</label>
+    <input id="account-name-input" type="text" required>
+</div>
+<div id="account-no">
+    <label for="account-no-input">Account No</label>
+    <input id="account-no-input" type="text" required>
+</div>
+<div id="amount">
+    <label for="amount-input">Amount</label>
+    <input id="amount-input" type="text" required>
+</div>
+<div id="info">
+    <label for="info-input">Info</label>
+    <input id="info-input" type="text" required>
+</div>
+<div id="bank">
+    <label for="bank-input">Bank</label>
+    <select id="bank-input">
+        <option th:each="bank : ${banks}" th:value="${bank.bin}" th:data-img-src="${bank.logo}">[[${bank.name}]]<option>
+    </select>
+</div>
+<button onClick="generateQr()">Generate</button>
+<img src="" id="qr-code" />
 </body>
 </html>
 <script>
@@ -71,4 +94,15 @@
         }
 
     }
+    function formatState (state) {
+        if (!state.id) return state.text;
+        const imgSrc = $(state.element).data('img-src');
+        return $(`<span><img src="${imgSrc}" width="50" style="margin-right: 10px" />${state.text}</span>`);
+    }
+
+    $('#bank-input').select2({
+        templateResult: formatState,
+        templateSelection: formatState,
+        minimumResultsForSearch: -1
+    });
 </script>

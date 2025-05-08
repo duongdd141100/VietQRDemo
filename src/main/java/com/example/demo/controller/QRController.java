@@ -13,7 +13,7 @@ public class QRController {
     @Autowired
     private BankService bankService;
 
-    @RequestMapping("/qr")
+    @RequestMapping("/")
     public String qr(Model model) {
         model.addAttribute("banks", bankService.getAllBanks());
         return "qr";
