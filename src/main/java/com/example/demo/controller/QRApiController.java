@@ -17,7 +17,7 @@ public class QRApiController {
     private QrService qrService;
 
     @PostMapping("/generate")
-    public ResponseDto generateQR(@RequestBody RequestQrDto requestQrDto) throws JsonProcessingException {
+    public ResponseDto generateQR(@RequestBody RequestQrDto requestQrDto) {
         log.info(requestQrDto.toString());
         return qrService.getQr(requestQrDto);
     }
